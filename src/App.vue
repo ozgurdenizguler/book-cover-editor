@@ -8,7 +8,9 @@
         <ChooseBook :books="books" @bookSelected="bookSelectedHandler" />
       </v-container>
       <div class="button-container">
-        <v-btn color="primary" @click="nextStep" :disabled="!selectedBook">Next</v-btn>
+        <v-btn color="primary" @click="nextStep" :disabled="!selectedBook"
+          >Next</v-btn
+        >
       </div>
     </div>
     <div v-else-if="step === steps.COVER_UPLOAD">
@@ -25,8 +27,8 @@ import axios from "axios";
 import ChooseBook from "./components/ChooseBook.vue";
 
 const STEPS = {
-  CHOOSE_BOOK: 'chooseBook',
-  COVER_UPLOAD: 'coverUpload'
+  CHOOSE_BOOK: "chooseBook",
+  COVER_UPLOAD: "coverUpload",
 };
 
 export default {
@@ -40,11 +42,20 @@ export default {
       books: [],
       step: STEPS.CHOOSE_BOOK,
       selectedBook: null,
-      steps: STEPS
+      steps: STEPS,
     };
   },
   mounted() {
     this.fetchBooks();
+    const storedBookTitle = localStorage.getItem("selectedBookTitle");
+    if (storedBookTitle) {
+      const match = /(.*) - (.*)/.exec(storedBookTitle);
+      if (match) {
+        const title = match[1];
+        const author = match[2];
+        this.selectedBook = { title, author };
+      }
+    }
   },
   methods: {
     async fetchBooks() {
@@ -97,14 +108,14 @@ export default {
 h1 {
   font-size: 28px;
   margin-bottom: 5px;
-  color: #1023ee;; 
+  color: #1023ee;
 }
 
 h2 {
   font-size: 24px;
   margin-top: 20px;
   margin-bottom: 10px;
-  color: #ea0e50; 
+  color: #ea0e50;
 }
 
 .v-container {
